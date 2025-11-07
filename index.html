@@ -338,7 +338,7 @@
         await addDoc(collection(db, "leads"), lead);
 
         // ALERTA + MENSAJE EN CONSOLA
-        alert(`Datos recibidos!\n\n${nombre}\n+54${celular.replace(/\D/g, '')}\nCP: ${lead.codigoPostal}\n\nDentro de 24 hs un gestor se contactará con usted`);
+        alert(`Hola!\n\n${nombre}\n+54${celular.replace(/\D/g, '')}\nCP: ${lead.codigoPostal}\n\nDentro de 24 hs un gestor se contactará con usted`);
         console.log("LEAD MANUAL GUARDADO:", lead);
 
       } catch (e) {
@@ -350,3 +350,4 @@
 </body>
 
 </html>
+
