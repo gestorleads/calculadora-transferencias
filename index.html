@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estimador de Transferencias | Córdoba Capital</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --f1-red: #e10600;
+      --carbon: #1a1a1a;
+      --neon: #00ff88;
+      --text: #ffffff;
+      --text-muted: #cccccc;
+      --glass: rgba(30, 30, 30, 0.7);
+      --border: rgba(255, 255, 255, 0.15);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+      min-height: 100vh;
+      font-family: 'Rajdhani', sans-serif;
+      color: var(--text);
+      padding: 20px 0;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a1a1a"/><path d="M0,50 Q25,45 50,50 T100,50 L100,100 L0,100 Z" fill="%23222222"/><path d="M0,0 Q25,5 50,0 T100,0 L100,50 L0,50 Z" fill="%23222222"/></svg>') repeat;
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .f1-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .f1-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--f1-red), var(--neon), var(--f1-red));
+    }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: var(--f1-red);
+      text-shadow: 0 0 10px rgba(225, 6, 0, 0.5);
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+
+    .fecha-hora {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .badge-zona {
+      background: var(--f1-red);
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .form-control, .form-select {
+      background: rgba(40, 40, 40, 0.8) !important;
+      border: 1.5px solid var(--border) !important;
+      color: white !important;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background: rgba(50, 50, 50, 0.9) !important;
+      border-color: var(--f1-red) !important;
+      box-shadow: 0 0 0 0.2rem rgba(225, 6, 0, 0.3) !important;
+      color: white !important;
+    }
+
+    .form-select {
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23e10600' viewBox='0 0 16 16'%3e%3cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3e%3c/svg%3e") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 1rem center !important;
+      background-size: 14px !important;
+      padding-right: 2.8rem !important;
+    }
+
+    .form-select option {
+      background: #2a2a2a !important;
+      color: white !important;
+    }
+
+    .input-group-text {
+      background: rgba(40, 40, 40, 0.9);
+      border: 1.5px solid var(--border);
+      color: var(--neon);
+      font-weight: 600;
+    }
+
+    .btn-f1 {
+      background: var(--neon);
+      color: black;
+      border: none;
+      border-radius: 16px;
+      padding: 0.85rem 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+      width: 100%;
+    }
+
+.btn-f1:hover {
+  background: #00e677;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 255, 136, 0.6);
+}
+
+    .resultado {
+      background: rgba(40, 40, 40, 0.7);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin-top: 1.5rem;
+      animation: fadeIn 0.7s ease-out;
+      backdrop-filter: blur(8px);
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .zona-tag {
+      background: var(--neon);
+      color: black;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .footer-dnrpa {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 576px) {
+      .f1-card { padding: 2rem; border-radius: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="f1-card">
+      <!-- TÍTULO -->
+      <div class="text-center mb-4">
+        <h2>Estimador de Transferencias</h2>
+        <p class="fecha-hora" id="fechaHora"></p>
+        <span class="badge-zona">CÓRDOBA CAPITAL</span>
+      </div>
+
+      <!-- 1. VALOR -->
+      <div class="mb-3">
+        <label class="form-label">Valor del vehículo</label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input type="number" id="amount" class="form-control" placeholder="8.500.000" oninput="calcular()" />
+        </div>
+      </div>
+
+      <!-- 2. TIPO -->
+      <div class="mb-3">
+        <label class="form-label">Tipo de vehículo</label>
+        <select id="tipo" class="form-select" onchange="calcular()">
+          <option value="auto-nacional">Auto Nacional</option>
+          <option value="auto-importado">Auto Importado</option>
+          <option value="moto">Moto</option>
+          <option value="camioneta">Camioneta</option>
+          <option value="camion">Camión</option>
+        </select>
+      </div>
+
+      <!-- 3. PATENTE -->
+      <div class="mb-3">
+        <label class="form-label">Patente (opcional)</label>
+        <input type="text" id="patente" class="form-control" placeholder="ABC 123" />
+      </div>
+
+      <!-- 4. CÓDIGO POSTAL -->
+      <div class="mb-3">
+        <label class="form-label">Código Postal</label>
+        <input type="number" id="codigoPostal" class="form-control" placeholder="5000" min="5000" max="5147" oninput="calcular()" />
+        <small style="color: var(--text-muted);">Para asignar gestoría cercana</small>
+      </div>
+
+      <!-- RESULTADO (AUTOMÁTICO) -->
+      <div id="resultado"></div>
+
+      <!-- FOOTER -->
+      <div class="footer-dnrpa">
+        <small>Aranceles DNRPA 2025 - Res. 273/2024 (02/09/2024)</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase + JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "calculadora-transferencias.firebaseapp.com",
+      projectId: "calculadora-transferencias",
+      storageBucket: "calculadora-transferencias.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abc123"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    //const MAKE_WEBHOOK = 'https://hook.make.com/abc123def456ghi789';
+
+    // FECHA EN VIVO
+    function actualizarFecha() {
+      const now = new Date().toLocaleString('es-AR', {
+        timeZone: 'America/Argentina/Cordoba',
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      document.getElementById('fechaHora').innerHTML = `${now}`;
+    }
+    setInterval(actualizarFecha, 1000);
+    actualizarFecha();
+
+    // ARANCELES DNRPA 2025
+    const aranceles = {
+      'auto-nacional': 0.01,
+      'auto-importado': 0.01,
+      'moto': 0.01,
+      'camioneta': 0.01,
+      'camion': 0.01
+    };
+
+    window.calcular = function() {
+      const monto = parseFloat(document.getElementById('amount').value);
+      const tipo = document.getElementById('tipo').value;
+      const cp = document.getElementById('codigoPostal').value;
+
+      if (!monto || monto < 500000 || !cp || cp < 5000 || cp > 5147) {
+        document.getElementById('resultado').innerHTML = '';
+        return;
+      }
+
+      const arancel = monto * aranceles[tipo];
+      const sellos = monto * 0.015;
+      const total = monto + arancel + sellos;
+
+      const zona = cp >= 5000 && cp <= 5009 ? "Centro" :
+                   cp >= 5016 && cp <= 5018 ? "Norte" :
+                   cp >= 5012 && cp <= 5014 ? "Sur" :
+                   cp >= 5008 && cp <= 5010 ? "Este" :
+                   cp >= 5145 && cp <= 5147 ? "Oeste" : "Otra";
+
+      document.getElementById('resultado').innerHTML = `
+        <div class="resultado">
+          <p><strong>Arancel DNRPA (1%):</strong> $${arancel.toLocaleString('es-AR')}</p>
+          <p><strong>Sellos (1.5%):</strong> $${sellos.toLocaleString('es-AR')}</p>
+          <p class="fs-5 text-success mb-3"><strong>TOTAL: $${total.toLocaleString('es-AR')}</strong></p>
+          <p><span class="zona-tag">${zona}</span> • Gestoría asignada</p>
+          <button onclick="capturarLead()" class="btn btn-f1 mt-3">
+            ENVIAR A GESTORÍA
+          </button>
+        </div>
+      `;
+    };
+
+    window.capturarLead = async function() {
+      const nombre = prompt("Nombre:");
+      const celular = prompt("WhatsApp (sin 15, con 54):");
+      if (!nombre || !celular) return;
+
+      const lead = {
+        nombre,
+        celular: `+54${celular.replace(/\D/g, '')}`,
+        monto: parseInt(document.getElementById('amount').value),
+        tipo: document.getElementById('tipo').value,
+        patente: document.getElementById('patente').value || "No ingresada",
+        provincia: "Córdoba",
+        ciudad: "Córdoba Capital",
+        codigoPostal: parseInt(document.getElementById('codigoPostal').value),
+        fecha: new Date().toISOString()
+      };
+
+      try {
+        // SOLO GUARDA EN FIREBASE
+        await addDoc(collection(db, "leads"), lead);
+
+        // ALERTA + MENSAJE EN CONSOLA
+        alert(`Datos recibidos!\n\n${nombre}\n+54${celular.replace(/\D/g, '')}\nCP: ${lead.codigoPostal}\n\nDentro de 24 hs un gestor se contactará con usted`);
+        console.log("LEAD MANUAL GUARDADO:", lead);
+
+      } catch (e) {
+        console.error("Error:", e);
+        alert("Error de conexión. Intenta de nuevo.");
+      }
+    };
+  </script>
+</body>
+</html>
