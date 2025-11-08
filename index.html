@@ -17,9 +17,7 @@
       --glass: rgba(30, 30, 30, 0.7);
       --border: rgba(255, 255, 255, 0.15);
     }
-
     * { box-sizing: border-box; }
-
     body {
       background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
       min-height: 100vh;
@@ -29,7 +27,6 @@
       position: relative;
       overflow-y: auto;
     }
-
     body::before {
       content: '';
       position: absolute;
@@ -38,7 +35,6 @@
       opacity: 0.3;
       z-index: -1;
     }
-
     .f1-card {
       background: var(--glass);
       backdrop-filter: blur(16px);
@@ -51,14 +47,12 @@
       padding: 2.5rem;
       position: relative;
     }
-
     .f1-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; height: 5px;
       background: linear-gradient(90deg, var(--f1-red), var(--neon), var(--f1-red));
     }
-
     h2 {
       font-family: 'Orbitron', sans-serif;
       font-weight: 700;
@@ -67,14 +61,12 @@
       letter-spacing: 1px;
       margin-bottom: 1rem;
     }
-
     .fecha-hora {
       font-size: 0.9rem;
       color: var(--text-muted);
       text-align: center;
       margin: 0.5rem 0 1rem;
     }
-
     .badge-zona {
       background: var(--f1-red);
       color: white;
@@ -84,7 +76,6 @@
       font-weight: 600;
       letter-spacing: 1px;
     }
-
     .form-control, .form-select {
       background: rgba(40, 40, 40, 0.8) !important;
       border: 1.5px solid var(--border) !important;
@@ -94,18 +85,15 @@
       font-weight: 500;
       transition: all 0.3s ease;
     }
-
     .form-control::placeholder {
       color: rgba(255, 255, 255, 0.5) !important;
     }
-
     .form-control:focus, .form-select:focus {
       background: rgba(50, 50, 50, 0.9) !important;
       border-color: var(--f1-red) !important;
       box-shadow: 0 0 0 0.2rem rgba(225, 6, 0, 0.3) !important;
       color: white !important;
     }
-
     .form-select {
       -webkit-appearance: none !important;
       -moz-appearance: none !important;
@@ -116,19 +104,16 @@
       background-size: 14px !important;
       padding-right: 2.8rem !important;
     }
-
     .form-select option {
       background: #2a2a2a !important;
       color: white !important;
     }
-
     .input-group-text {
       background: rgba(40, 40, 40, 0.9);
       border: 1.5px solid var(--border);
       color: var(--neon);
       font-weight: 600;
     }
-
     .btn-f1 {
       background: var(--neon);
       color: black;
@@ -141,13 +126,17 @@
       box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
       width: 100%;
     }
-
-.btn-f1:hover {
-  background: #00e677;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 255, 136, 0.6);
-}
-
+    .btn-f1:hover {
+      background: #00e677;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 255, 136, 0.6);
+    }
+    .btn-f1:disabled {
+      background: #555;
+      color: #aaa;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
     .resultado {
       background: rgba(40, 40, 40, 0.7);
       border: 1.5px solid var(--border);
@@ -158,12 +147,10 @@
       backdrop-filter: blur(8px);
       text-align: center;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .zona-tag {
       background: var(--neon);
       color: black;
@@ -172,21 +159,18 @@
       font-size: 0.8rem;
       font-weight: 600;
     }
-
     .footer-dnrpa {
       text-align: center;
       margin-top: 1.5rem;
       font-size: 0.8rem;
       color: var(--text-muted);
     }
-
     @media (max-width: 576px) {
       .f1-card { padding: 2rem; border-radius: 18px; }
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="f1-card">
       <!-- TÍTULO -->
@@ -233,6 +217,26 @@
       <!-- RESULTADO (AUTOMÁTICO) -->
       <div id="resultado"></div>
 
+      <!-- DISCLAIMER LEGAL (SIEMPRE VISIBLE) -->
+      <div class="alert alert-info small p-2 mt-3">
+        <strong>Estimación no oficial</strong> basada en aranceles DNRPA (1%) y sellos (1.5%). 
+        Consulta valores oficiales en <a href="https://www.dnrpa.gov.ar" target="_blank">DNRPA</a> o tu gestoría.
+      </div>
+
+      <!-- CHECKBOX + TÉRMINOS (SIEMPRE VISIBLE) -->
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="acepto" required>
+        <label class="form-check-label small" for="acepto">
+          Acepto los <a href="#terminos" data-bs-toggle="modal" data-bs-target="#modalTerminos">Términos y Condiciones</a> 
+          y autorizo el uso de mis datos según la <a href="#privacidad" data-bs-toggle="modal" data-bs-target="#modalPrivacidad">Política de Privacidad</a>.
+        </label>
+      </div>
+
+      <!-- BOTÓN ENVIAR (DESACTIVADO HASTA ACEPTAR) -->
+      <button onclick="capturarLead()" class="btn btn-f1 mt-3" id="btnEnviar" disabled>
+        ENVIAR CONSULTA A GESTORÍA
+      </button>
+
       <!-- FOOTER -->
       <div class="footer-dnrpa">
         <small>Aranceles DNRPA 2025 - Res. 273/2024 (02/09/2024)</small>
@@ -244,7 +248,6 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
     const firebaseConfig = {
       apiKey: "TU_API_KEY",
       authDomain: "calculadora-transferencias.firebaseapp.com",
@@ -253,10 +256,8 @@
       messagingSenderId: "123456789",
       appId: "1:123456789:web:abc123"
     };
-
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    //const MAKE_WEBHOOK = 'https://hook.make.com/abc123def456ghi789';
 
     // FECHA EN VIVO
     function actualizarFecha() {
@@ -287,40 +288,36 @@
       const monto = parseFloat(document.getElementById('amount').value);
       const tipo = document.getElementById('tipo').value;
       const cp = document.getElementById('codigoPostal').value;
-
       if (!monto || monto < 500000 || !cp || cp < 5000 || cp > 5147) {
         document.getElementById('resultado').innerHTML = '';
         return;
       }
-
       const arancel = monto * aranceles[tipo];
       const sellos = monto * 0.015;
       const total = monto + arancel + sellos;
-
       const zona = cp >= 5000 && cp <= 5009 ? "Centro" :
                    cp >= 5016 && cp <= 5018 ? "Norte" :
                    cp >= 5012 && cp <= 5014 ? "Sur" :
                    cp >= 5008 && cp <= 5010 ? "Este" :
                    cp >= 5145 && cp <= 5147 ? "Oeste" : "Otra";
-
       document.getElementById('resultado').innerHTML = `
         <div class="resultado">
           <p><strong>Arancel DNRPA (1%):</strong> $${arancel.toLocaleString('es-AR')}</p>
           <p><strong>Sellos (1.5%):</strong> $${sellos.toLocaleString('es-AR')}</p>
           <p class="fs-5 text-success mb-3"><strong>TOTAL: $${total.toLocaleString('es-AR')}</strong></p>
           <p><span class="zona-tag">${zona}</span> • Gestoría asignada</p>
-          <button onclick="capturarLead()" class="btn btn-f1 mt-3">
-            ENVIAR A GESTORÍA
-          </button>
         </div>
       `;
     };
 
     window.capturarLead = async function() {
+      if (!document.getElementById('acepto').checked) {
+        alert("Debes aceptar los Términos y Condiciones.");
+        return;
+      }
       const nombre = prompt("Nombre:");
       const celular = prompt("WhatsApp (sin 15, con 54):");
       if (!nombre || !celular) return;
-
       const lead = {
         nombre,
         celular: `+54${celular.replace(/\D/g, '')}`,
@@ -332,22 +329,65 @@
         codigoPostal: parseInt(document.getElementById('codigoPostal').value),
         fecha: new Date().toISOString()
       };
-
       try {
-        // SOLO GUARDA EN FIREBASE
         await addDoc(collection(db, "leads"), lead);
-
-        // ALERTA + MENSAJE EN CONSOLA
-        alert(`Hola!\n\n${nombre}\n+54${celular.replace(/\D/g, '')}\nCP: ${lead.codigoPostal}\n\nDentro de 24 hs un gestor se contactará con usted`);
-        console.log("LEAD MANUAL GUARDADO:", lead);
-
+        alert(`¡Hola ${nombre}!\n\n+54${celular.replace(/\D/g, '')}\nCP: ${lead.codigoPostal}\n\nDentro de 24 hs un gestor se contactará con usted.`);
+        console.log("LEAD GUARDADO:", lead);
       } catch (e) {
         console.error("Error:", e);
         alert("Error de conexión. Intenta de nuevo.");
       }
     };
+
+    // HABILITAR BOTÓN SOLO SI ACEPTA TÉRMINOS
+    document.getElementById('acepto').addEventListener('change', function() {
+      document.getElementById('btnEnviar').disabled = !this.checked;
+    });
   </script>
+
+  <!-- MODAL TÉRMINOS Y CONDICIONES -->
+  <div class="modal fade" id="modalTerminos" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Términos y Condiciones</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body small">
+          <p>1. Esta calculadora ofrece una <strong>estimación aproximada</strong> del costo de transferencia automotor en Córdoba Capital, basada en aranceles DNRPA (1%) y sellos (1.5%).</p>
+          <p>2. Los valores pueden variar según actualizaciones de DNRPA, AFIP o Municipalidad.</p>
+          <p>3. No somos una gestoría ni asesoramos legalmente. Recomendamos consultar con un profesional matriculado.</p>
+          <p>4. Al usar esta herramienta, aceptás que los datos ingresados se usen solo para generar tu estimación y no se comparten con terceros.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL POLÍTICA DE PRIVACIDAD -->
+  <div class="modal fade" id="modalPrivacidad" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Política de Privacidad</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body small">
+          <p><strong>Responsable:</strong> [Tu Nombre o Razón Social]</p>
+          <p><strong>Finalidad:</strong> Generar estimación de costos de transferencia automotor.</p>
+          <p><strong>Datos recolectados:</strong> Nombre, celular, monto, tipo de vehículo, patente, código postal.</p>
+          <p><strong>Legitimación:</strong> Tu consentimiento al marcar el checkbox.</p>
+          <p><strong>Destinatarios:</strong> Solo el administrador del sitio (no se comparte con terceros).</p>
+          <p><strong>Derechos:</strong> Acceso, rectificación, supresión. Contacto: gestorleads25@gmail.com</p>
+          <p><strong>Base legal:</strong> Ley 25.326 de Protección de Datos Personales (Argentina).</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
-
 </html>
-
