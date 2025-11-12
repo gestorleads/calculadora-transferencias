@@ -381,16 +381,21 @@ window.enviarLead = async function() {
   }
 
   const lead = {
-    nombre,
-    celular: `+54${celular.replace(/\D/g, '')}`,
-    monto: parseInt(document.getElementById('amount').value),
-    tipo: document.getElementById('tipo').value,
-    patente: document.getElementById('patente').value || "No ingresada",
-    provincia: "Córdoba",
-    ciudad: "Córdoba Capital",
-    codigoPostal: parseInt(document.getElementById('codigoPostal').value),
-    fecha: new Date().toISOString()
-  };
+  nombre,
+  celular: `+54${celular.replace(/\D/g, '')}`,
+  monto: parseInt(document.getElementById('amount').value),
+  tipo: document.getElementById('tipo').value,
+  patente: document.getElementById('patente').value || "No ingresada",
+  provincia: "Córdoba",
+  ciudad: "Córdoba Capital",
+  codigoPostal: parseInt(document.getElementById('codigoPostal').value),
+  zona: document.getElementById('resultado').innerHTML.includes('Centro') ? 'Centro' :
+        document.getElementById('resultado').innerHTML.includes('Sur') ? 'Sur' :
+        document.getElementById('resultado').innerHTML.includes('Norte') ? 'Norte' :
+        document.getElementById('resultado').innerHTML.includes('Este') ? 'Este' :
+        document.getElementById('resultado').innerHTML.includes('Oeste') ? 'Oeste' : 'Otra',
+  fecha: new Date().toISOString()
+};
 
   try {
     await addDoc(collection(db, "leads"), lead);
@@ -452,6 +457,7 @@ window.enviarLead = async function() {
   </div>
 </body>
 </html>
+
 
 
 
