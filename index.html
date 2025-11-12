@@ -198,9 +198,9 @@
     <div class="f1-card">
       <!-- TÍTULO -->
       <div class="text-center mb-4">
-        <h2>Estimador de Transferencias</h2>
+        <h2>Calculadora de Transferencias</h2>
         <p class="fecha-hora" id="fechaHora"></p>
-        <span class="badge-zona">CÓRDOBA CAPITAL</span>
+        <span class="badge-zona">CÓRDOBA</span>
       </div>
 
       <!-- 1. VALOR -->
@@ -255,10 +255,32 @@
         </label>
       </div>
 
-      <!-- BOTÓN ENVIAR (DESACTIVADO HASTA ACEPTAR) -->
-      <button onclick="capturarLead()" class="btn btn-f1 mt-3" id="btnEnviar" disabled>
-        ENVIAR CONSULTA A GESTORÍA
-      </button>
+      <!-- FORMULARIO DE LEAD (EN VEZ DE PROMPT) -->
+<div id="formLead" style="display:none;">
+  <div class="mb-3">
+    <label class="form-label">Nombre completo</label>
+    <input type="text" id="nombre" class="form-control" placeholder="Juan Pérez" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">WhatsApp (sin 15, con 54)</label>
+    <div class="input-group">
+      <span class="input-group-text">+54</span>
+      <input type="tel" id="celular" class="form-control" placeholder="3512345678" required>
+    </div>
+    <small class="text-muted">Ej: 3512345678 → +54 9 351 2345678</small>
+  </div>
+  <button onclick="enviarLead()" class="btn btn-f1 w-100" id="btnEnviarForm">
+    ENVIAR A GESTORÍA CERCANA
+  </button>
+  <div id="mensajeExito" class="alert alert-success mt-3" style="display:none;">
+    ¡Enviado! Un gestor te contacta en 24 hs.
+  </div>
+</div>
+
+<!-- BOTÓN PARA MOSTRAR FORMULARIO -->
+<button onclick="mostrarFormulario()" class="btn btn-f1 mt-3 w-100" id="btnMostrarForm" disabled>
+  ENVIAR CONSULTA A GESTORÍA
+</button>
 
       <!-- FOOTER -->
       <div class="footer-dnrpa">
@@ -333,39 +355,52 @@
       `;
     };
 
-    window.capturarLead = async function() {
-      if (!document.getElementById('acepto').checked) {
-        alert("Debes aceptar los Términos y Condiciones.");
-        return;
-      }
-      const nombre = prompt("Nombre:");
-      const celular = prompt("WhatsApp (sin 15, con 54):");
-      if (!nombre || !celular) return;
-      const lead = {
-        nombre,
-        celular: `+54${celular.replace(/\D/g, '')}`,
-        monto: parseInt(document.getElementById('amount').value),
-        tipo: document.getElementById('tipo').value,
-        patente: document.getElementById('patente').value || "No ingresada",
-        provincia: "Córdoba",
-        ciudad: "Córdoba Capital",
-        codigoPostal: parseInt(document.getElementById('codigoPostal').value),
-        fecha: new Date().toISOString()
-      };
-      try {
-        await addDoc(collection(db, "leads"), lead);
-        alert(`¡Hola ${nombre}!\n\n+54${celular.replace(/\D/g, '')}\nCP: ${lead.codigoPostal}\n\nDentro de 24 hs un gestor se contactará con usted.`);
-        console.log("LEAD GUARDADO:", lead);
-      } catch (e) {
-        console.error("Error:", e);
-        alert("Error de conexión. Intenta de nuevo.");
-      }
-    };
-
     // HABILITAR BOTÓN SOLO SI ACEPTA TÉRMINOS
     document.getElementById('acepto').addEventListener('change', function() {
-      document.getElementById('btnEnviar').disabled = !this.checked;
-    });
+  document.getElementById('btnMostrarForm').disabled = !this.checked;
+});
+
+    // MOSTRAR FORMULARIO AL HACER CLIC
+window.mostrarFormulario = function() {
+  if (!document.getElementById('acepto').checked) {
+    alert("Debes aceptar los Términos y Condiciones.");
+    return;
+  }
+  document.getElementById('btnMostrarForm').style.display = 'none';
+  document.getElementById('formLead').style.display = 'block';
+};
+
+// ENVIAR LEAD
+window.enviarLead = async function() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const celular = document.getElementById('celular').value.trim();
+  
+  if (!nombre || !celular) {
+    alert("Completa nombre y WhatsApp");
+    return;
+  }
+
+  const lead = {
+    nombre,
+    celular: `+54${celular.replace(/\D/g, '')}`,
+    monto: parseInt(document.getElementById('amount').value),
+    tipo: document.getElementById('tipo').value,
+    patente: document.getElementById('patente').value || "No ingresada",
+    provincia: "Córdoba",
+    ciudad: "Córdoba Capital",
+    codigoPostal: parseInt(document.getElementById('codigoPostal').value),
+    fecha: new Date().toISOString()
+  };
+
+  try {
+    await addDoc(collection(db, "leads"), lead);
+    document.getElementById('mensajeExito').style.display = 'block';
+    document.getElementById('formLead').innerHTML = '<p class="text-center text-success">¡Enviado con éxito!</p>';
+    console.log("LEAD GUARDADO:", lead);
+  } catch (e) {
+    alert("Error de conexión. Intenta de nuevo.");
+  }
+};
   </script>
 
   <!-- CARGA BOOTSTRAP JS (PARA MODALES) -->
@@ -417,6 +452,7 @@
   </div>
 </body>
 </html>
+
 
 
 
