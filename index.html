@@ -258,7 +258,7 @@
       <!-- FORMULARIO DE LEAD (EN VEZ DE PROMPT) -->
 <div id="formLead" style="display:none;">
   <div class="mb-3">
-    <label class="form-label">Nombre completo</label>
+    <label class="form-label">Nombre</label>
     <input type="text" id="nombre" class="form-control" placeholder="Juan Pérez" required>
   </div>
   <div class="mb-3">
@@ -273,7 +273,7 @@
     ENVIAR A GESTORÍA CERCANA
   </button>
   <div id="mensajeExito" class="alert alert-success mt-3" style="display:none;">
-    ¡Enviado! Un gestor te contacta en 24 hs.
+    ¡Enviado! Un gestor te contacta en 24/48 hs.
   </div>
 </div>
 
@@ -350,7 +350,7 @@
           <p><strong>Arancel DNRPA (1%):</strong> $${arancel.toLocaleString('es-AR')}</p>
           <p><strong>Sellos (1.5%):</strong> $${sellos.toLocaleString('es-AR')}</p>
           <p class="fs-5 text-success mb-3"><strong>TOTAL: $${total.toLocaleString('es-AR')}</strong></p>
-          <p><span class="zona-tag">${zona}</span> • Gestoría asignada</p>
+          <p><strong>Zona:</strong> <span class="zona-tag">${zona}</span></p>
         </div>
       `;
     };
@@ -452,6 +452,7 @@ window.enviarLead = async function() {
   </div>
 </body>
 </html>
+
 
 
 
