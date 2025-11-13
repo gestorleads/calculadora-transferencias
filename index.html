@@ -428,7 +428,7 @@
       try {
         await addDoc(collection(db, "leads"), lead);
         document.getElementById('mensajeExito').style.display = 'block';
-        document.getElementById('formLead').innerHTML = '<p class="text-center text-success">¡Enviado con éxito!</p>';
+        document.getElementById('formLead').innerHTML = '<p class="text-center text-success">¡Enviado! Un gestor te contacta en 24/48 hs.</p>';
         console.log("LEAD GUARDADO:", lead);
       } catch (e) {
         alert("Error de conexión. Intenta de nuevo.");
@@ -480,6 +480,7 @@
   </div>
 </body>
 </html>
+
 
 
 
