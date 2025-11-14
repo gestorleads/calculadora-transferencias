@@ -389,6 +389,14 @@
           <p class="text-center text-muted small">Valores estimados. Consulta registro local.</p>
         </div>
       `;
+
+      // ENVIAR A GA4: CÁLCULO
+      gtag('event', 'calcular_costo', {
+        monto: monto,
+        provincia: window.provinciaSeleccionada,
+        origen: origen,
+        valor_total: total
+      });
     };
 
     // CHECKBOX
@@ -430,6 +438,14 @@
         document.getElementById('mensajeExito').style.display = 'block';
         document.getElementById('formLead').innerHTML = '<p class="text-center text-success">¡Enviado! Un gestor te contacta en 24/48 hs.</p>';
         console.log("LEAD GUARDADO:", lead);
+
+        // ENVIAR A GA4: LEAD
+        gtag('event', 'enviar_lead', {
+          provincia: window.provinciaSeleccionada,
+          monto: lead.monto,
+          localidad: window.localidadIngresada,
+          origen: lead.origen
+        });
       } catch (e) {
         alert("Error de conexión. Intenta de nuevo.");
       }
@@ -480,6 +496,7 @@
   </div>
 </body>
 </html>
+
 
 
 
