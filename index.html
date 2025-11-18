@@ -257,15 +257,44 @@
         </button>
       </div>
 
-      <!-- RESULTADO -->
+            <!-- RESULTADO -->
       <div id="resultado"></div>
+
+      <!-- FORMULARIO LEAD (SIEMPRE VISIBLE) -->
+      <div class="mt-4 p-4 bg-dark rounded border border-success" id="formLead">
+        <h4 class="text-center mb-4">¡Te contactamos GRATIS en 24 hs!</h4>
+        
+        <div class="mb-3">
+          <input type="text" id="nombre" class="form-control form-control-lg" placeholder="Tu nombre" required>
+        </div>
+        <div class="mb-3">
+          <div class="input-group">
+            <span class="input-group-text">+54</span>
+            <input type="tel" id="celular" class="form-control form-control-lg" placeholder="3512345678 (sin 15)" required>
+          </div>
+        </div>
+
+        <button onclick="enviarLead()" class="btn btn-success btn-lg w-100 shadow-lg">
+          SÍ, QUIERO QUE ME LLAMEN GRATIS
+        </button>
+
+        <div class="form-check mt-3">
+          <input type="checkbox" class="form-check-input" id="acepto" required>
+          <label class="form-check-label small text-light" for="acepto">
+            Acepto los <a href="#terminos" data-bs-toggle="modal" data-bs-target="#modalTerminos">Términos</a> y <a href="#privacidad" data-bs-toggle="modal" data-bs-target="#modalPrivacidad">Privacidad</a>
+          </label>
+        </div>
+
+        <div id="mensajeExito" class="alert alert-success mt-3 text-center" style="display:none;">
+          <strong>¡Enviado!</strong> Un gestor de tu zona te llama en 24/48 hs.
+        </div>
+      </div>
 
       <!-- DISCLAIMER -->
       <div class="alert alert-info small p-2 mt-3">
-        <strong>Estimación no oficial</strong> basada en DNRPA 2025 (Res. 273/2024). Incluye fijos: Form 08 $6.120, Form 13 $4.068, Alta $3.490, Libre deuda $3.390.
-        Consulta <a href="https://www.dnrpa.gov.ar" target="_blank">DNRPA</a>.
+        Estimación no oficial basada en DNRPA 2025. Consulta valores oficiales en DNRPA.
       </div>
-
+      
       <!-- CHECKBOX -->
       <div class="form-check mb-3">
         <input type="checkbox" class="form-check-input" id="acepto" required>
@@ -498,6 +527,7 @@
   </div>
 </body>
 </html>
+
 
 
 
