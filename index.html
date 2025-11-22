@@ -167,6 +167,10 @@
       color: #000000 !important;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  emailjs.init('F2SrhrFL753pcfUJv');  // ← Este es tu "Public Key" o "User ID" que aparece en el dashboard de EmailJS
+</script>
 </head>
 <body>
   <div class="container">
@@ -389,28 +393,23 @@
         document.getElementById('mensajeExito').style.display = 'block';
         document.getElementById('formLead').innerHTML = '<p class="text-center text-success">¡Enviado! Un gestor te contacta en 24/48 hs.</p>';
 
-        // 3. ENVÍO AUTOMÁTICO DE EMAIL A ZAPIER (GRATIS)
-        const emailBody = `
-Nuevo lead desde calculadoratransferencias.ar
-
-Nombre: ${lead.nombre}
-Celular: ${lead.celular}
-Monto vehículo: $${lead.monto.toLocaleString('es-AR')}
-Origen: ${lead.origen === 'nacional' ? 'Nacional' : 'Importado'}
-Tipo: ${lead.tipo}
-Patente: ${lead.patente}
-Provincia: ${lead.provincia}
-Localidad: ${lead.localidad}
-Fecha: ${new Date().toLocaleString('es-AR')}
-        `.trim();
-
-        const mailtoLink = `mailto:gestorleads25@gmail.com` +
-          `?bcc=gestorleads25@gmail.com` +   // ← Esto hace que llegue al Inbox
-          `&subject=NUEVO LEAD CALCULADORA TRANSFERENCIAS` +
-          `&body=${encodeURIComponent(emailBody)}`;
-
-        const win = window.open(mailtoLink, '_blank');
-        if (win) setTimeout(() => win.close(), 800);
+                // === ENVÍO CON EMAILJS (invisible, sin popups, 100% gratis) ===
+        emailjs.send('service_kr62f16', 'template_8e84dz7', {
+          nombre: lead.nombre,
+          celular: lead.celular,
+          monto: lead.monto.toLocaleString('es-AR'),
+          origen: lead.origen === 'nacional' ? 'Nacional' : 'Importado',
+          tipo: lead.tipo,
+          patente: lead.patente,
+          provincia: lead.provincia,
+          localidad: lead.localidad,
+          fecha: new Date().toLocaleString('es-AR')
+        }).then(() => {
+          console.log('Lead enviado a EmailJS → Zapier');
+        }).catch(err => {
+          console.error('Error EmailJS:', err);
+        });
+        // =================================================
 
         // 4. GA4
         gtag('event', 'enviar_lead', {
@@ -435,6 +434,7 @@ Fecha: ${new Date().toLocaleString('es-AR')}
   <div class="modal fade" id="modalPrivacidad" tabindex="-1">...</div>
 </body>
 </html>
+
 
 
 
