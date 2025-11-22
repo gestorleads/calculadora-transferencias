@@ -457,6 +457,32 @@
         document.getElementById('formLead').innerHTML = '<p class="text-center text-success">¡Enviado! Un gestor te contacta en 24/48 hs.</p>';
         console.log("LEAD GUARDADO:", lead);
 
+                // ENVÍO AUTOMÁTICO DE EMAIL A ZAPIER
+        const emailBody = `
+Nuevo lead desde calculadoratransferencias.ar
+
+Nombre: ${lead.nombre}
+Celular: ${lead.celular}
+Monto vehículo: $${lead.monto?.toLocaleString('es-AR') || 'No ingresado'}
+Origen: ${lead.origen === 'nacional' ? 'Nacional' : 'Importado'}
+Tipo: ${lead.tipo}
+Patente: ${lead.patente}
+Provincia: ${lead.provincia}
+Localidad: ${lead.localidad}
+Fecha: ${new Date(lead.fecha).toLocaleString('es-AR')}
+        `.trim();
+
+        const mailtoLink = `mailto:gestorleads25@gmail.com` +
+          `?subject=Nuevo Lead Calculadora` +
+          `&body=${encodeURIComponent(emailBody)}`;
+
+        // Esto abre el cliente de correo del usuario por 1 segundo y lo cierra automáticamente
+        const mailWindow = window.open(mailtoLink, '_blank');
+        if (mailWindow) {
+          setTimeout(() => mailWindow.close(), 1000);
+        }
+        // =================================================
+
         // ENVIAR A GA4: LEAD
         gtag('event', 'enviar_lead', {
           provincia: window.provinciaSeleccionada,
@@ -514,6 +540,7 @@
   </div>
 </body>
 </html>
+
 
 
 
